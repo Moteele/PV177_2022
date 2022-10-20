@@ -8,7 +8,7 @@
 # now copy the filename.pub to your github account
 
 # add this to your .bash_profile. It starts the ssh-agent at login
-'''
+
 SSH_ENV="$HOME/.ssh/agent-environment"
 
 function start_agent {
@@ -33,7 +33,6 @@ start_agent;
 fi
 export VISUAL=vim
 export EDITOR="$VISUAL"
-'''
 
 # now run
 source ~/.bash_profile
