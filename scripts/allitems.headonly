@@ -1,0 +1,34 @@
+FILE: ./s1.txt
+Ahoj
+a
+a
+a
+a
+a
+a
+a
+a
+a
+
+
+FILE: ./test1/test2/s3.txt
+Nene
+
+
+FILE: ./test1/s2.txt
+test
+
+
+FILE: ./heads.sh
+#!/bin/bash
+
+# tento skript vezme cely podadresar a ke kazdemu souboru vygeneruje verzi, ve ktere je jen prvnich 10 souboru
+FILE="./allitems.headonly"
+rm $FILE
+
+DIR="./res"
+rm -rf $DIR
+mkdir $DIR
+
+
+
