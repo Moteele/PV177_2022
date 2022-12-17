@@ -30,12 +30,12 @@ docker exec -it es-node01 /usr/share/elasticsearch/bin/elasticsearch-create-enro
   867882fd823ed07197e7c46932023a716369d2728f4480c8c1aa0a877dcdbf61
 
 ??  Configure Kibana to use this cluster:
-• Run Kibana and click the configuration link in the terminal when Kibana starts.
-• Copy the following enrollment token and paste it into Kibana in your browser (valid for the next 30 minutes):
+â€¢ Run Kibana and click the configuration link in the terminal when Kibana starts.
+â€¢ Copy the following enrollment token and paste it into Kibana in your browser (valid for the next 30 minutes):
   eyJ2ZXIiOiI4LjUuMiIsImFkciI6WyIxNzIuMTguMC4yOjkyMDAiXSwiZmdyIjoiODY3ODgyZmQ4MjNlZDA3MTk3ZTdjNDY5MzIwMjNhNzE2MzY5ZDI3MjhmNDQ4MGM4YzFhYTBhODc3ZGNkYmY2MSIsImtleSI6IlVncUZ4SVFCQWtuTUY4R1ItY2JPOkZKcTBwNXZaVEdHcWpjcWFTWk85THcifQ==
 
 ?? Configure other nodes to join this cluster:
-• Copy the following enrollment token and start new Elasticsearch nodes with `bin/elasticsearch --enrollment-token <token>` (valid for the next 30 minutes):
+â€¢ Copy the following enrollment token and start new Elasticsearch nodes with `bin/elasticsearch --enrollment-token <token>` (valid for the next 30 minutes):
   eyJ2ZXIiOiI4LjUuMiIsImFkciI6WyIxNzIuMTguMC4yOjkyMDAiXSwiZmdyIjoiODY3ODgyZmQ4MjNlZDA3MTk3ZTdjNDY5MzIwMjNhNzE2MzY5ZDI3MjhmNDQ4MGM4YzFhYTBhODc3ZGNkYmY2MSIsImtleSI6IlZBcUZ4SVFCQWtuTUY4R1Itc1kwOmdYWEcyX0tGUUktX3FpWXZvREQyakEifQ==
 
   If you're running in Docker, copy the enrollment token and run:
@@ -55,7 +55,7 @@ Status: Downloaded newer image for docker.elastic.co/kibana/kibana:8.5.1
 [2022-11-16T09:31:44.035+00:00][INFO ][plugins-service] Plugin "profiling" is disabled.
 [2022-11-16T09:31:44.129+00:00][INFO ][http.server.Preboot] http server running at http://0.0.0.0:5601
 [2022-11-16T09:31:44.213+00:00][INFO ][plugins-system.preboot] Setting up [1] plugins: [interactiveSetup]
-[2022-11-16T09:31:44.215+00:00][INFO ][preboot] "interactiveSetup" plugin is holding setup: Validating Elasticsearch connection configuration…
+[2022-11-16T09:31:44.215+00:00][INFO ][preboot] "interactiveSetup" plugin is holding setup: Validating Elasticsearch connection configurationâ€¦
 [2022-11-16T09:31:44.250+00:00][INFO ][root] Holding setup until preboot stage is completed.
 
 
@@ -77,3 +77,25 @@ sudo docker container exec -it kib-01 /bin/bash
 PRIDANI NOVEHO ELASTIC NODU
 - you must also set discovery.seed_hosts so that the new node can discover the rest of its cluster
 - you need to set transport.host to a supported value (such as uncommenting the suggested value of 0.0.0.0)
+
+
+When we exceeded size limit, the solution (temporary) was:
+curl --cacert /home/debian/pipeline/http_ca.crt --user elastic:tqBSmTf4UU2J3s=ccEgp -X PUT "https://localhost:9200/_cluster/settings?pretty" -H 'Content-Type: application/json' -d'
+{                
+  "persistent": {                                          
+    "cluster.routing.allocation.disk.watermark.low": "90%",
+    "cluster.routing.allocation.disk.watermark.low.max_headroom": "100GB",
+    "cluster.routing.allocation.disk.watermark.high": "95%",
+    "cluster.routing.allocation.disk.watermark.high.max_headroom": "20GB",
+    "cluster.routing.allocation.disk.watermark.flood_stage": "97%",
+    "cluster.routing.allocation.disk.watermark.flood_stage.max_headroom": "5GB",
+    "cluster.routing.allocation.disk.watermark.flood_stage.frozen": "97%",
+    "cluster.routing.allocation.disk.watermark.flood_stage.frozen.max_headroom": "5GB"
+  }
+}
+'
+curl --cacert /home/debian/pipeline/http_ca.crt --user elastic:tqBSmTf4UU2J3s=ccEgp -X PUT "https://localhost:9200/*/_settings?expand_wildcards=all&pretty" -H 'Content-Type: application/json' -d'
+{                
+  "index.blocks.read_only_allow_delete": null              
+}                                                                                                                                
+'
