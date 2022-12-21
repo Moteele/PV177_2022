@@ -99,3 +99,11 @@ curl --cacert /home/debian/pipeline/http_ca.crt --user elastic:tqBSmTf4UU2J3s=cc
   "index.blocks.read_only_allow_delete": null              
 }                                                                                                                                
 '
+
+Update hodnoty
+curl --cacert /home/debian/pipeline/http_ca.crt --user elastic:tqBSmTf4UU2J3s=ccEgp  -X POST "https:│
+//localhost:9200/vip_more_lists/_update/ojOTEoUBoN3eDecAuVFl?pretty" -H 'Content-Type: application/json' -d'            │
+{                                                                                                                       │
+  "script" : "ctx._source.new_field = \u0027value_of_new_field\u0027"                                                   │
+}                                                                                                                       │
+'
